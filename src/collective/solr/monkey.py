@@ -27,11 +27,14 @@ def searchResults(self, REQUEST=None, **kw):
     if only_active and not _checkPermission(AccessInactivePortalContent, self):
         kw['effectiveRange'] = DateTime()
 
-    adapter = queryAdapter(self, ISearchDispatcher)
-    if adapter is not None:
-        return adapter(REQUEST, **kw)
-    else:
-        return self._cs_old_searchResults(REQUEST, **kw)
+    try:
+        adapter = queryAdapter(self, ISearchDispatcher)
+        if adapter is not None:
+            return adapter(REQUEST, **kw)
+        else:
+            return self._cs_old_searchResults(REQUEST, **kw)
+    except:
+            return self._cs_old_searchResults(REQUEST, **kw)
 
 
 def patchCatalogTool():
